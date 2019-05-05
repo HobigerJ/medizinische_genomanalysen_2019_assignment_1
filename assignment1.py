@@ -62,7 +62,15 @@ class Assignment1:
         
         print("Done fetching data")
         
-    def get_coordinates_of_gene(self):
+    def get_coordinates_of_gene(self, coordinates_file, genename):
+        with open(coordinates_file, "r") as fh:
+            for line in fh.readlines():
+                coord = line.strip("'").strip(" ").strip("'").strip("(").split(",")
+                if coord[0] == "'"+genename+"'":
+                    coord_string = "chr21:" + coord[3].strip(" ") + "-" + coord[4].strip(" ")
+                    coord_list = [coord[3].strip(" "), coord[4].strip(" ")]
+                    print("coordstring: ", coord_string, "coordliste: ", coord_list)
+        
         ## Use UCSC file
         print("todo")
         
@@ -102,7 +110,8 @@ def main():
     print("Assignment 1")
     assignment1 = Assignment1()
     assignment1.print_summary()
-    assignment1.download_gene_coordinates("hg38", "gene_coordinates")
+    #assignment1.download_gene_coordinates("hg38", "gene_coordinates")
+    assignment1.get_coordinates_of_gene("gene_coordinates", "GSN")
     
     
     print("Done with assignment 1")
