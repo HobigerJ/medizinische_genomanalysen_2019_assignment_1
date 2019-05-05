@@ -1,22 +1,28 @@
-import mysql.connector
+#!/usr/bin/env python3
 
-__author__ = 'XXX'
+import mysql.connector
+import pysam
+
+__author__ = "Johanna Hobiger"
 
 ##
 ## Concept:
 ## TODO
 ##
-
+samfile = pysam.AlignmentFile("chr21.bam", "rb") 
+# bzw "ex1.sam", "r" für SAM files. rb = readbinary
 
 class Assignment1:
     
     def __init__(self):
         ## Your gene of interest
-        self.gene = ""
+        self.gene = "CTSB"
 
     
     def download_gene_coordinates(self, genome_reference, file_name):
+        #genome_reference = "hg38", filename = "gene_coordinates" file in das hinein geschrieben wird
         ## TODO concept
+
         
         print("Connecting to UCSC to fetch data")
         
@@ -64,27 +70,27 @@ class Assignment1:
         print("todo")
                         
     def get_sam_header(self):
+        print("todo") # pysam verwenden
+        
+    def get_properly_paired_reads_of_gene(self): # pysam verwenden
         print("todo")
         
-    def get_properly_paired_reads_of_gene(self):
+    def get_gene_reads_with_indels(self): # pysam verwenden
         print("todo")
         
-    def get_gene_reads_with_indels(self):
+    def calculate_total_average_coverage(self): # pysam verwenden
         print("todo")
         
-    def calculate_total_average_coverage(self):
+    def calculate_gene_average_coverage(self): # pybed tools. Command Line Tools mit subprocess verwenden
         print("todo")
         
-    def calculate_gene_average_coverage(self):
-        print("todo")
-        
-    def get_number_mapped_reads(self):
+    def get_number_mapped_reads(self): # pysam verwenden?
         print("todo")
 
-    def get_region_of_gene(self):
+    def get_region_of_gene(self): # pysam verwenden?
         print("todo")
         
-    def get_number_of_exons(self):
+    def get_number_of_exons(self): # pysam verwenden?
         print("ads")
     
     
@@ -96,6 +102,7 @@ def main():
     print("Assignment 1")
     assignment1 = Assignment1()
     assignment1.print_summary()
+    assignment1.download_gene_coordinates("hg38", "gene_coordinates")
     
     
     print("Done with assignment 1")
