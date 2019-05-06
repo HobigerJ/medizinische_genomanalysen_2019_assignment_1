@@ -112,7 +112,8 @@ def main():
     assignment1.print_summary()
     #assignment1.download_gene_coordinates("hg38", "gene_coordinates")
     assignment1.get_coordinates_of_gene("gene_coordinates", "GSN")
-    
+    for line in samfile:
+        print(line)
     
     print("Done with assignment 1")
     
