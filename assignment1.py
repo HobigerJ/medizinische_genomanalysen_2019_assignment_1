@@ -2,6 +2,7 @@
 
 import mysql.connector
 import pysam
+import pybedtools
 
 __author__ = "Johanna Hobiger"
 
@@ -15,19 +16,17 @@ samfile = pysam.AlignmentFile("chr21.bam", "rb")
 class Assignment1:
     
     def __init__(self):
-        ## Your gene of interest
         self.gene = "CTSB"
+        self.genome_reference = "hg38"
+        self.genedict = self.download_gene_coordinates(file_name="test.txt")
 
     
-    def download_gene_coordinates(self, genome_reference, file_name):
-        #genome_reference = "hg38", filename = "gene_coordinates" file in das hinein geschrieben wird
-        ## TODO concept
-
+    def download_gene_coordinates(self, file_name):
         
         print("Connecting to UCSC to fetch data")
         
         ## Open connection
-        cnx = mysql.connector.connect(host='genome-mysql.cse.ucsc.edu', user='genomep', passwd='password', db=genome_reference)
+        cnx = mysql.connector.connect(host='genome-mysql.cse.ucsc.edu', user='genomep', passwd='password', db=self.genome_reference)
         
         ## Get cursor
         cursor = cnx.cursor()
@@ -44,38 +43,51 @@ class Assignment1:
                         "refGene.exonEnds"]
         
         ## Build query
-        query = "SELECT DISTINCT %s from refGene" % ",".join(query_fields)
+        query = 'SELECT DISTINCT %s from refGene' % ','.join(query_fields) + \
+        ' WHERE refGene.name2="' + self.gene + '"'
         
         ## Execute query
         cursor.execute(query)
         
         ## Write to file
-        ## TODO this may need some work 
+        genedict = {}
         with open(file_name, "w") as fh:
             for row in cursor:
                 fh.write(str(row) + "\n")
-    
+                genedict = {
+                "name2": row[0],
+                "name": row[1],
+                "chrom": row[2],
+                "txStart": row[3],
+                "txEnd": row[4],
+                "strand": row[5],
+                "exonCount": row[6],
+                "exonStarts": row[7],
+                "exonEnds": row[8]
+                }    
             
         ## Close cursor & connection
         cursor.close()
         cnx.close()
-        
         print("Done fetching data")
+        return genedict
         
-    def get_coordinates_of_gene(self, coordinates_file, genename):
-        with open(coordinates_file, "r") as fh:
+    def get_coordinates_of_gene(self):
+        '''with open(coordinates_file, "r") as fh:
             for line in fh.readlines():
                 coord = line.strip("'").strip(" ").strip("'").strip("(").split(",")
                 if coord[0] == "'"+genename+"'":
                     coord_string = "chr21:" + coord[3].strip(" ") + "-" + coord[4].strip(" ")
                     coord_list = [coord[3].strip(" "), coord[4].strip(" ")]
-                    print("coordstring: ", coord_string, "coordliste: ", coord_list)
-        
-        ## Use UCSC file
-        print("todo")
+                    print("coordstring: ", coord_string, "coordliste: ", coord_list)'''
+
+        print("Coordinates of gene " + self.gene + ": ")
+        print("Start:\t", self.genedict["txStart"], "\nEnd:\t", self.genedict["txEnd"])
         
     def get_gene_symbol(self):
-        print("todo")
+        print("Gene Symbol: ")
+        print(self.genedict["name"])
+        print()
                         
     def get_sam_header(self):
         print("todo") # pysam verwenden
@@ -103,6 +115,7 @@ class Assignment1:
     
     
     def print_summary(self):
+        self.get_coordinates_of_gene()
         print("Print all results here")
     
     
@@ -110,10 +123,8 @@ def main():
     print("Assignment 1")
     assignment1 = Assignment1()
     assignment1.print_summary()
-    #assignment1.download_gene_coordinates("hg38", "gene_coordinates")
-    assignment1.get_coordinates_of_gene("gene_coordinates", "GSN")
-    for line in samfile:
-        print(line)
+    #assignment1.download_gene_coordinates("gene_coordinates")
+    
     
     print("Done with assignment 1")
     
