@@ -102,10 +102,9 @@ class Assignment1:
             if read.is_proper_pair:
                 i += 1
         if i==0:
-            print("No properly paired read")
+            print("No properly paired reads")
         else:
-            print("Number of properly paird read: ")
-            print(i, "\n")
+            print("Number of properly paired reads: ", i)
         
     def get_gene_reads_with_indels(self):   
         i=0
@@ -119,8 +118,7 @@ class Assignment1:
         if i == 0:
             print("No gene reads with indels")
         else:
-            print("Number of gene reads with indels: ")
-            print(i)
+            print("Number of gene reads with indels: ", i)
         print()
         
     def calculate_total_average_coverage(self):   # Bedtools
@@ -136,8 +134,7 @@ class Assignment1:
             i+=1
         
         coverage = average/i
-        print("Total average coverage: ")
-        print(coverage, "\n")
+        print("Total average coverage: ", coverage)
         
     def calculate_gene_average_coverage(self):  # Bedtools
         print("Start calculating gene average coverage...")
@@ -186,8 +183,8 @@ class Assignment1:
         self.get_sam_header()
         self.get_properly_paired_reads_of_gene()
         self.get_gene_reads_with_indels()
-        self.calculate_total_average_coverage()
-        self.calculate_gene_average_coverage()
+        #self.calculate_total_average_coverage()
+        #self.calculate_gene_average_coverage()
         self.get_number_mapped_reads()
         self.get_region_of_gene()
         self.get_number_of_exons()
